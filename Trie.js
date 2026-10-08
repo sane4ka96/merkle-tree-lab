@@ -18,18 +18,45 @@ class Trie {
     }
 
     insert(word) {
-        // TODO Insert word symbol by symbol
+        let current = this.root;
 
+        for (const letter of word) {
+            if (!current.children[letter]) {
+                current.children[letter] = new TrieNode(letter);
+            }
+            current = current.children[letter];
+        }
+
+        current.isWord = true;
     }
 
     hasNode(word){
-        // TODO Check is word in Trie
-        return false;
+        let current = this.root;
+
+        for (const letter of word) {
+            if (!current.children[letter]) {
+                return false;
+            }
+            current = current.children[letter];
+        }
+
+        return current.isWord === true;
     }
 
     getAllNodes(){
-        // TODO returns all nodes as array
-        return [];
+        const result = [];
+
+        const traverse = (node, prefix) => {
+            if (node.isWord) {
+                result.push(prefix);
+            }
+            for (const letter in node.children) {
+                traverse(node.children[letter], prefix + letter);
+            }
+        };
+
+        traverse(this.root, '');
+        return result;
     }
 }
 
